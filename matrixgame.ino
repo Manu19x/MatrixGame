@@ -125,7 +125,7 @@ int score = 0;
 int highscore = 0;
 long playMillis = 0;
 
-int playerRow = 0;  // Rândul inițial al jucătorului
+int playerRow = 0;  
 int playerCol = 0;
 
 bool soundPlaying = false;
@@ -148,9 +148,9 @@ enum MenuStates {
 bool displayAboutText = false;
 bool soundEnabled = true;
 unsigned long previousMillis = 0;
-long greenInterval = 0; // Intervalul de timp pentru LED-ul verde (în milisecunde)
-long redInterval = 0;   // Intervalul de timp pentru LED-ul roșu (în milisecunde)
-bool isGreen = true; // Variabilă pentru a ține evidența stării LED-ului verde
+long greenInterval = 0;
+long redInterval = 0;  
+bool isGreen = true; 
 
 void setup() {
   for (int i = 0; i < matrixSize; ++i) {
@@ -167,16 +167,16 @@ void setup() {
 
   pinMode(joySW, INPUT_PULLUP);
 
-  showIntroMessage("PRESS JSW.");  // Afiseaza mesajul introductiv cu un text la alegere
+  showIntroMessage("PRESS JSW.");  
 
-  // Setează starea inițială a meniului după ce a fost afișat mesajul introductiv
+  
   menuState = START_GAME;
 
-  lc.shutdown(0, false);  // Pornire matrice de LED-uri
-  lc.setIntensity(0, 8);  // Setare intensitate luminoasă
+  lc.shutdown(0, false);  
+  lc.setIntensity(0, 8);  
   lc.clearDisplay(0);
 
-  pinMode(redPin, OUTPUT);  // Setează pinul pentru LED-ul roșu ca ieșire
+  pinMode(redPin, OUTPUT);  
   pinMode(greenPin, OUTPUT);
 
   xPos = 7;
@@ -184,8 +184,8 @@ void setup() {
 
   pinMode(buzzerPin, OUTPUT);
 
-  digitalWrite(redPin, LOW);  // Aprinde LED-ul roșu
-  digitalWrite(greenPin, LOW); // Stinge LED-ul verde
+  digitalWrite(redPin, LOW);  
+  digitalWrite(greenPin, LOW); 
    previousMillis = millis();
    Serial.begin(9600);
   
@@ -267,7 +267,7 @@ void loop() {
     case ADJUSTING:
       lcd.setCursor(1,0);
       centerTextOnLcd("Control Sunete", 0);
-      displaySoundSetting(); // Afișează starea sunetului pe ecran
+      displaySoundSetting(); 
        joystickEventCheck();
 
 
@@ -278,9 +278,9 @@ void loop() {
 }
 void showIntroMessage(const char* message) {
   lcd.clear();
-  centerTextOnLcd("WELCOME!", 0);  // Afiseaza mesajul introductiv centrat pe prima linie
+  centerTextOnLcd("WELCOME!", 0);  //  mesajul introductiv centrat pe prima linie
 
-  // Afiseaza mesajul primit ca parametru centrat pe a doua linie
+  //  mesajul primit ca parametru centrat pe a doua linie
   centerTextOnLcd(message, 1);
 
   while (digitalRead(joySW) == HIGH)
@@ -323,7 +323,7 @@ void joystickEventCheck() {
       case ABOUT:
         changeMenuState(true);  // inapoi în meniu
       case ADJUSTING:
-        toggleSoundSetting(); // Inversează starea sunetului la apăsarea butonului în meniu
+        toggleSoundSetting(); // inverseaza starea sunetului la apasarea butonului în meniu
         lcd.clear();
         break;
     }
@@ -338,7 +338,7 @@ void joystickEventCheck() {
       case ABOUT:
         changeMenuState(false);  // inainte în meniu
       case ADJUSTING:
-        toggleSoundSetting(); // Inversează starea sunetului la apăsarea butonului în meniu
+        toggleSoundSetting(); 
         lcd.clear();
         break;
     }
@@ -370,7 +370,7 @@ void joystickEventCheck() {
           }
           lcd.clear();
           break;
-       // case PLAYING: /// ar trebui scos
+       // case PLAYING: /// 
         //  menuState = START_GAME;
         //  lcd.clear();
         //  break;
@@ -404,22 +404,22 @@ void joystickEventCheck() {
 void movegame() {
   //alternate();
   if (millis() - lastMoved > moveInterval) {
-    updatePositions();     // Update the LED position based on joystick input
-    lastMoved = millis();  // Reset the movement timer
+    updatePositions();     // updateaza pozitia ledului in functie de joystick
+    lastMoved = millis();  // reseteaza timerul de miscae
   }
-  // Update the LED matrix display if there's been a change
+  // updatam matricea led daca a aparut vreo schimbare
   if (matrixChanged) {
     updateMatrix();
     matrixChanged = false;
   }
   if (millis() - lastBlink > blinkInterval) {
-    // Inversează starea LED-ului
+    // Inverseaza starea LED-ului
     currentLedState = !currentLedState;
 
-    // Actualizează starea LED-ului la poziția curentă în matrice
+    // Actualizeaza starea LED-ului la pozitia curenta în matrice
     lc.setLed(0, xPos, yPos, currentLedState);
 
-    lastBlink = millis();  // Actualizează timpul ultimului blink
+    lastBlink = millis();  // Actualizeaza timpul ultimului blink
   }
   alternate();
 }
@@ -427,7 +427,7 @@ void movegame() {
 void updateMatrix() {
   for (int row = 0; row < matrixSize; row++) {
     for (int col = 0; col < matrixSize; col++) {
-      lc.setLed(0, row, col, matrix[row][col]);  // Update each LED state
+      lc.setLed(0, row, col, matrix[row][col]);  
     }
   }
 }
@@ -458,12 +458,12 @@ void updateMatrix() {
 }
 */
 void changeState(int led) {
-  digitalWrite(greenPin, LOW); // Stinge LED-ul verde
-  digitalWrite(redPin, LOW);   // Stinge LED-ul roșu
+  digitalWrite(greenPin, LOW); 
+  digitalWrite(redPin, LOW); 
 
-  digitalWrite(led, HIGH); // Aprinde LED-ul specificat ca argument
+  digitalWrite(led, HIGH); 
   
-  // Aici poți adăuga logica pentru mișcare sau alte acțiuni legate de starea LED-urilor
+  
 }
 
 void alternate()
@@ -472,20 +472,20 @@ void alternate()
 
   if (isGreen && (currentMillis - previousMillis >= greenInterval)) {
     previousMillis = currentMillis;
-    changeState(redPin); // Trecem la starea roșie
+    changeState(redPin); // Trecem la starea rosie
     isGreen = false;
-    greenInterval = random(1000, 2700); // Generăm un nou interval aleatoriu pentru LED-ul verde
+    greenInterval = random(1000, 2700); // Generam un nou interval aleatoriu pentru LED-ul verde
   } else if (!isGreen && (currentMillis - previousMillis >= redInterval)) {
     previousMillis = currentMillis;
     changeState(greenPin); // Trecem la starea verde
     isGreen = true;
-    redInterval = random(1000, 3300); // Generăm un nou interval aleatoriu pentru LED-ul roșu
+    redInterval = random(1000, 3300); // Generam un nou interval aleatoriu pentru LED-ul roșu
   }
 }
 
 void updatePositions() {
-  int xValue = analogRead(joyX);  // Citirea valorii axei X
-  int yValue = analogRead(joyY);  // Citirea valorii axei Y
+  int xValue = analogRead(joyX);  
+  int yValue = analogRead(joyY);  
 
   // Stocarea ultimelor poziții
   xLastPos = xPos;
@@ -515,7 +515,7 @@ void updatePositions() {
     }
   } 
   if (!isGreen && (xValue < minThreshold || xValue > maxThreshold || yValue < minThreshold || yValue > maxThreshold)) {
-    menuState = GAME_OVER; // Setăm starea de GAME_OVER în cazul unei mișcări când LED-ul roșu este activ
+    menuState = GAME_OVER; // Setam starea de GAME_OVER in cazul unei miscari cand LED-ul rosu este activ
     if(soundEnabled){
       int frequency = 1000; 
       unsigned long duration = 500; 
@@ -526,11 +526,11 @@ void updatePositions() {
   }
   
 
-  // Actualizare matrice în cazul în care poziția jucătorului s-a schimbat
+  // actualizare matrice in cazul in care pozitia playerului s-a schimbat
   if (xPos != xLastPos || yPos != yLastPos) {
     matrixChanged = true;
-    matrix[xLastPos][yLastPos] = 0;  // Stinge LED-ul la ultima poziție
-    matrix[xPos][yPos] = 1;          // Aprinde LED-ul la noua poziție
+    matrix[xLastPos][yLastPos] = 0;  // Stinge LED-ul la ultima pozitie
+    matrix[xPos][yPos] = 1;          // Aprinde LED-ul la noua pozitie
   }
   
   if(xPos==1&&yPos==0){
@@ -554,19 +554,17 @@ void updatePositions() {
 }
 
 void resetGame() {
-  // Reinițializarea variabilelor și stării jocului la valorile inițiale
   matrix[xLastPos][yLastPos] = 0;
   matrix[xPos][yPos] = 0;
   xPos = 7;
   yPos = 7;
   //xLastPos = 0;
   //yLastPos = 0;
-  //menuState = START_GAME;  // Sau starea inițială corespunzătoare
-  // Reinițializarea matricei sau a altor variabile necesare pentru joc la valorile inițiale
-  // Exemplu:
+  //menuState = START_GAME;  // 
+  
   for (int i = 0; i < matrixSize; ++i) {
     for (int j = 0; j < matrixSize; ++j) {
-      matrix[i][j] = initialMatrix[i][j];  // Resetarea matricei la valorile inițiale
+      matrix[i][j] = initialMatrix[i][j];  
     }
   }
   digitalWrite(redPin, LOW);  
